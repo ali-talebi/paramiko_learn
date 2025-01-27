@@ -52,3 +52,30 @@ finally :
 
 print(client.__dict__)
 
+
+ویژگی‌ها و متدهای مهم paramiko.Transport
+1. بررسی فعال بودن اتصال
+
+
+ssh_client.get_transport().is_active()
+
+مقدار True برمی‌گرداند اگر اتصال SSH هنوز فعال باشد.
+اگر اتصال قطع شده باشد یا مشکل داشته باشد، مقدار False خواهد بود.
+
+2. بررسی احراز هویت کامل (Authentication Complete)
+ssh_client.get_transport().is_authenticated()
+مقدار True برمی‌گرداند اگر فرآیند احراز هویت با موفقیت انجام شده باشد.
+اگر احراز هویت انجام نشده باشد یا شکست خورده باشد، مقدار False برمی‌گرداند.
+
+ssh_client.get_transport().close()
+
+اتصال SSH را به صورت امن می‌بندد.
+4. دریافت مشخصات سرور و کلاینت
+مشخصات کلاینت:
+
+
+
+
+
+
+
