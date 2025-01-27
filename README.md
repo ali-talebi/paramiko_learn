@@ -243,6 +243,58 @@ password = "your_password"
 
 غیربلوکینگ (Non-blocking) به این معناست که عملیات به سرعت ادامه پیدا می‌کند و در صورت نبود داده، خطا یا وضعیت خاصی را برنمی‌گرداند.
 
+:
+
+    import paramiko
+    
+    # ایجاد SSHClient و اتصال به سرور
+    ssh_client = paramiko.SSHClient()
+    ssh_client.set_missing_host_key_policy(paramiko.AutoAddPolicy())
+    ssh_client.connect("example.com", username="user", password="password")
+    
+    # باز کردن کانال
+    channel = ssh_client.get_transport().open_channel("session")
+    
+    # تنظیم حالت بلوکینگ
+    channel.setblocking(True)  # یا False برای غیربلوکینگ
+    
+    # ارسال دستور و دریافت خروجی
+    channel.exec_command("echo Hello")
+    output = channel.recv(1024).decode("utf-8")
+    print(output)
+    channel.close()
+
+
+۲. get_pty()
+
+متد get_pty() به شما این امکان را می‌دهد که یک pseudo-terminal (PTY) برای کانال ایجاد کنید. این به ویژه زمانی مفید است که بخواهید دستورات را به صورت تعاملی اجرا کنید (برای مثال، دستورات نیازمند ورودی کاربر یا دستوراتی که به صورت تعاملی اجرا می‌شوند).
+
+با استفاده از این متد، می‌توانید یک ترمینال شبیه‌سازی شده (pseudo-terminal) باز کنید تا تعاملات مشابه یک ترمینال واقعی فراهم شود.
+
+channel.get_pty()
+
+:
+
+    import paramiko
+    
+    # ایجاد SSHClient و اتصال به سرور
+    ssh_client = paramiko.SSHClient()
+    ssh_client.set_missing_host_key_policy(paramiko.AutoAddPolicy())
+    ssh_client.connect("example.com", username="user", password="password")
+    
+    # باز کردن کانال
+    channel = ssh_client.get_transport().open_channel("session")
+    
+    # ایجاد PTY (برای تعاملات ترمینال)
+    channel.get_pty()
+    
+    # اجرای یک دستور تعاملی
+    channel.exec_command("top")
+    
+    # دریافت خروجی
+    output = channel.recv(1024).decode("utf-8")
+    print(output)
+    channel.close()
 
 
 
