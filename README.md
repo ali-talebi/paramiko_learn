@@ -29,6 +29,7 @@ client.set_missing_host_key_policy(paramiko.AutoAddPolicy())
 ## try and except 
 
 try : 
+
     client.connect('your_address_ip' , 'user_name' , 'password' ) 
     stdin , stdout , stderr = client.exec_command('ls -l')
     print(stdout.read().decode())
@@ -40,10 +41,12 @@ try :
     sftp.get( 'remote_file_path' , 'local_file_path' )
 
 except Exception as e : 
+
     print(e)
 
 
 finally : 
+
     sftp.close()
     client.close()
 
