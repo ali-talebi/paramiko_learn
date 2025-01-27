@@ -298,3 +298,79 @@ channel.get_pty()
 
 
 
+
+۳. invoke_shell()
+
+
+متد invoke_shell() برای باز کردن یک shell تعاملی در سرور استفاده می‌شود. این متد یک کانال جدید ایجاد می‌کند که به شما این امکان را می‌دهد که دستورات را به صورت تعاملی ارسال کرده و پاسخ‌ها را دریافت کنید، مشابه کاری که در یک ترمینال SSH واقعی انجام می‌دهید.
+
+
+
+channel = ssh_client.invoke_shell()
+
+
+    import paramiko
+    
+    # ایجاد SSHClient و اتصال به سرور
+    ssh_client = paramiko.SSHClient()
+    ssh_client.set_missing_host_key_policy(paramiko.AutoAddPolicy())
+    ssh_client.connect("example.com", username="user", password="password")
+    
+    # باز کردن کانال برای تعامل با shell
+    channel = ssh_client.invoke_shell()
+    
+    # ارسال دستور به shell
+    channel.send("echo Hello, Shell!\n")
+    
+    # دریافت خروجی
+    output = channel.recv(1024).decode("utf-8")
+    print(output)
+    
+    # بستن کانال
+    channel.close()
+
+
+۴. send()
+
+
+متد send() برای ارسال داده‌ها از طریق کانال SSH استفاده می‌شود. این متد معمولاً زمانی که یک کانال از نوع shell یا exec باز باشد، برای ارسال ورودی به سرور یا یک برنامه خاص در سرور (مثل ارسال دستورات به bash یا sh) به کار می‌رود.
+
+
+channel.send(data)
+
+    
+    import paramiko
+    import time
+    
+    # ایجاد SSHClient و اتصال به سرور
+    ssh_client = paramiko.SSHClient()
+    ssh_client.set_missing_host_key_policy(paramiko.AutoAddPolicy())
+    ssh_client.connect("example.com", username="user", password="password")
+    
+    # باز کردن کانال
+    channel = ssh_client.invoke_shell()
+    
+    # ارسال دستور به کانال shell
+    channel.send("echo 'Hello from paramiko'\n")
+    
+    # خواندن خروجی
+    time.sleep(1)  # کمی منتظر بمانید تا خروجی آماده شود
+    output = channel.recv(1024).decode("utf-8")
+    print(output)
+    
+    # بستن کانال
+    channel.close()
+
+
+    جمع‌بندی
+setblocking(): تعیین می‌کند که کانال به صورت بلوکینگ یا غیربلوکینگ کار کند.
+
+get_pty(): ایجاد یک ترمینال شبیه‌سازی شده برای تعاملات ترمینالی.
+
+invoke_shell(): باز کردن یک شل تعاملی برای ارسال دستورات و دریافت خروجی.
+
+send(): ارسال داده‌ها (مانند دستورات) به سرور از طریق کانال.
+
+این متدها به شما این امکان را می‌دهند که تعاملات پیچیده‌تری با سرور SSH داشته باشید و دستورات را به صورت تعاملی یا غیرتعاملی اجرا کنید.
+
+
